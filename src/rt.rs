@@ -22,10 +22,10 @@ thread_local!(
 // when ROOT_CONTEXT get initialized. but in debug mode it
 // will be zero in generator context since the stack changed
 // to a different place, be careful about that.
-#[cfg(nightly)]
-#[thread_local]
-#[no_mangle]
-static mut ROOT_CONTEXT_P: *mut Context = ptr::null_mut();
+// #[cfg(nightly)]
+// #[thread_local]
+// #[no_mangle]
+// static mut ROOT_CONTEXT_P: *mut Context = ptr::null_mut();
 
 /// yield panic error types
 #[allow(dead_code)]
@@ -174,27 +174,27 @@ pub struct ContextStack {
     root: *mut Context,
 }
 
-#[cfg(nightly)]
-#[inline(never)]
-unsafe fn init_root_p() {
-    ROOT_CONTEXT_P = ROOT_CONTEXT.with(|r| &**r as *const _ as *mut Context);
-}
+// #[cfg(nightly)]
+// #[inline(never)]
+// unsafe fn init_root_p() {
+//     ROOT_CONTEXT_P = ROOT_CONTEXT.with(|r| &**r as *const _ as *mut Context);
+// }
 
 impl ContextStack {
-    #[cfg(nightly)]
-    #[inline(never)]
-    pub fn current() -> ContextStack {
-        unsafe {
-            if ROOT_CONTEXT_P.is_null() {
-                init_root_p();
-            }
-            ContextStack {
-                root: ROOT_CONTEXT_P,
-            }
-        }
-    }
+    // #[cfg(nightly)]
+    // #[inline(never)]
+    // pub fn current() -> ContextStack {
+    //     unsafe {
+    //         if ROOT_CONTEXT_P.is_null() {
+    //             init_root_p();
+    //         }
+    //         ContextStack {
+    //             root: ROOT_CONTEXT_P,
+    //         }
+    //     }
+    // }
 
-    #[cfg(not(nightly))]
+    // #[cfg(not(nightly))]
     #[inline(never)]
     pub fn current() -> ContextStack {
         let root = ROOT_CONTEXT.with(|r| &**r as *const _ as *mut Context);
